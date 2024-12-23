@@ -16,10 +16,12 @@ jobs:
       # Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v2
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Log into DockerHub
       - name: Log in to Docker Hub
@@ -27,6 +29,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Add a step to check the current working directory and list files
       - name: Check current directory and list files
@@ -35,19 +38,20 @@ jobs:
           pwd
           echo "Listing files:"
           ls -alh
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Build Docker image
       - name: Build Docker image
         run: |
-          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           docker build -t ecommerce-mock .
           docker tag ecommerce-mock ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest
-
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
   test:
     runs-on: self-hosted
 
@@ -55,25 +59,28 @@ jobs:
       # Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v2
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.12.3'
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Install dependencies
       - name: Install dependencies
         run: |
-          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Run tests
       - name: Run Tests
         run: |
-          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           pytest tests/
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
+
 
   deploy:
     runs-on: self-hosted
@@ -82,18 +89,21 @@ jobs:
       # Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v2
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       - name: Set KUBECONFIG
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
           export KUBECONFIG=$(pwd)/kubeconfig
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       - name: Test kubectl connection
         run: kubectl cluster-info
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
 
       # Deploy to Kubernetes Cluster
       - name: Deploy to Kubernetes Cluster
         run: |
-          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           kubectl apply -f ./k8s/deployment.yaml
           kubectl apply -f ./k8s/service.yaml
+        working-directory: "/home/clownprince/Projects VSCode/e-commerce-mock"
