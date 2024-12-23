@@ -15,7 +15,7 @@ jobs:
 
     - name: Set up Python environment
       run: |
-        echo "[DEBUG] Setting up Python virtual environment..."
+        [DEBUG] Setting up Python virtual environment...
         python3 -m venv venv-env
         source venv-env/bin/activate
         pip install --upgrade pip
@@ -23,7 +23,7 @@ jobs:
 
     - name: Run tests
       run: |
-        echo "[DEBUG] Running tests..."
+        [DEBUG] Running tests...
         source venv-env/bin/activate
         pytest --maxfail=5 --disable-warnings --verbose
         echo "[DEBUG] Tests completed."
@@ -38,7 +38,7 @@ jobs:
 
     - name: Set up Python environment
       run: |
-        echo "[DEBUG] Setting up Python virtual environment..."
+        [DEBUG] Setting up Python virtual environment...
         python3 -m venv venv-env  # Create the virtual environment
         source venv-env/bin/activate
         pip install --upgrade pip  # Upgrade pip to the latest version
@@ -46,9 +46,9 @@ jobs:
 
     - name: Build Docker image
       run: |
-        echo "[DEBUG] Building Docker image..."
+        [DEBUG] Building Docker image...
         docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest .
-        echo "[DEBUG] Docker image built."
+        [DEBUG] Docker image built.
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -58,6 +58,6 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: |
-        echo "[DEBUG] Pushing Docker image to Docker Hub..."
+        [DEBUG] Pushing Docker image to Docker Hub...
         docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest
-        echo "[DEBUG] Docker image pushed to Docker Hub."
+        [DEBUG] Docker image pushed to Docker Hub.
