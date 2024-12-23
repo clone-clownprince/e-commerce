@@ -75,7 +75,7 @@ jobs:
       - name: Set KUBECONFIG
         run: |
           export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-          kubectl get nodes
+          sudo kubectl get nodes
 
 
       # Deploy to a remote server or Kubernetes
