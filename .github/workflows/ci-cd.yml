@@ -39,7 +39,7 @@ jobs:
       # Build Docker image
       - name: Build Docker image
         run: |
-          cd /home/clownprince/Projects\ VSCode/e-commerce-mock
+          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           docker build -t ecommerce-mock .
           docker tag ecommerce-mock ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest
 
@@ -65,14 +65,14 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: |
-          cd /home/clownprince/Projects\ VSCode/e-commerce-mock
+          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       # Run tests
       - name: Run Tests
         run: |
-          cd /home/clownprince/Projects\ VSCode/e-commerce-mock
+          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           pytest tests/
 
   deploy:
@@ -94,6 +94,6 @@ jobs:
       # Deploy to Kubernetes Cluster
       - name: Deploy to Kubernetes Cluster
         run: |
-          cd /home/clownprince/Projects\ VSCode/e-commerce-mock
+          cd "/home/clownprince/Projects VSCode/e-commerce-mock"
           kubectl apply -f ./k8s/deployment.yaml
           kubectl apply -f ./k8s/service.yaml
