@@ -1,42 +1,17 @@
-name: E-Commerce CI/CD Workflow
+name: Deploy E-Commerce Application
 
 on:
-  push:
-    branches:
-      - main  # Trigger the workflow when code is pushed to the main branch
+  workflow_run:
+    workflows:
+      - Build E-Commerce Application  # Trigger when the build workflow completes
+    types:
+      - completed
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: self-hosted  # Run the job on an Ubuntu runner
     
     steps:
-    - name: Check out code
-      uses: actions/checkout@v3  # Checkout the code from the repository
-
-    - name: Install dependencies
-      run: |
-        python3 -m venv venv-env  # Create the virtual environment in a separate folder
-        source venv-env/bin/activate
-        python3 --version  # Ensure the correct version of Python is used
-        pip install --upgrade pip
-        pip install -r requirements.txt  # Install the dependencies
-
-    - name: Build Docker image
-      run: |
-        source venv-env/bin/activate  # Ensure the virtual environment is activated
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce:latest .  # Build Docker image
-
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Push Docker image to Docker Hub
-      run: |
-        source venv-env/bin/activate  # Ensure the virtual environment is activated
-        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce:latest  # Push Docker image
-
     - name: Set up K3s cluster
       run: |
         curl -sfL https://get.k3s.io | sh -  # Install K3s
