@@ -74,8 +74,11 @@ jobs:
 
       - name: Set KUBECONFIG
         run: |
-          export KUBECONFIG=~/.kube/config 
-          sudo kubectl get nodes
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
+
+      - name: Test kubectl connection
+        run: kubectl cluster-info
 
 
       # Deploy to a remote server or Kubernetes
