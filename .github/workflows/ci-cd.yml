@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python environment
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12'  # Specify the Python version to use
+        python-version: '3.12.3'  # Specify the Python version to use
 
     - name: Install dependencies
       run: |
@@ -54,7 +54,8 @@ jobs:
         sleep 10
         
         kubectl apply -f k8s/deployment.yaml  # Deploy Kubernetes resources
-
+        kubectl apply -f k8s/service.yaml
+        
     - name: Get service URL
       id: get_url  # Reference this step later
       run: |
