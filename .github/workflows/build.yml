@@ -20,12 +20,12 @@ jobs:
         python3 --version  # Ensure the correct version of Python is used
         pip install --upgrade pip
         pip install -r requirements.txt  # Install the dependencies
-
-      # Run tests
-    - name: Run Tests
+    
+    - name: Run tests
       run: |
-        pytest tests/  
-
+        source venv-env/bin/activate
+        pytest --maxfail=5 --disable-warnings  # Run pytest with options to limit output in case of failures
+    
     - name: Build Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest .  # Build Docker image
