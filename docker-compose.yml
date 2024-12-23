@@ -1,0 +1,17 @@
+
+services:
+  ecommerce-mock:
+    build: .
+    container_name: ecommerce-mock
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - .:/app
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge

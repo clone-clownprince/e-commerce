@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-mock
+  labels:
+    app: ecommerce-mock
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecommerce-mock
+  template:
+    metadata:
+      labels:
+        app: ecommerce-mock
+    spec:
+      containers:
+      - name: ecommerce-mock
+        image: clownprince/ecommerce-mock:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_ENV
+          value: "development"
