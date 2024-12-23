@@ -1,0 +1,12 @@
+﻿{
+  "repositoryName": "clone-clownprince/e-commerce-mock",
+  "pipelineDirectory": "e-commerce-mock",
+  "workspaceDirectory": "e-commerce-mock/e-commerce-mock",
+  "repositories": {
+    "clone-clownprince/e-commerce-mock": {
+      "repositoryPath": "e-commerce-mock/e-commerce-mock",
+      "lastRunOn": "12/23/2024 04:31:57 +02:00"
+    }
+  },
+  "lastRunOn": "12/23/2024 04:35:28 +02:00"
+}
