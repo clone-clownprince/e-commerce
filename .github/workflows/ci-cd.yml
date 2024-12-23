@@ -34,14 +34,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Check current working directory and list files
-      - name: Check current directory and list files
-        run: |
-          echo "Current working directory:"
-          pwd
-          echo "Listing files:"
-          ls -alh
-        working-directory: ${{ env.WORKING_DIR }}
+      
 
       # Build Docker image
       - name: Build Docker image
