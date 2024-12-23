@@ -1,4 +1,4 @@
-name: E-Commerce Mock CI/CD Workflow
+name: E-Commerce CI/CD Workflow
 
 on:
   push:
@@ -15,16 +15,16 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m venv venv
-        source venv/bin/activate
+        python -m venv venv-env  # Create the virtual environment in a separate folder
+        source venv-env/bin/activate
         python --version  # Ensure the correct version of Python is used
         pip install --upgrade pip
         pip install -r requirements.txt  # Install the dependencies
 
     - name: Build Docker image
       run: |
-        source venv/bin/activate  # Ensure the virtual environment is activated
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest .  # Build Docker image
+        source venv-env/bin/activate  # Ensure the virtual environment is activated
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce:latest .  # Build Docker image
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -34,8 +34,8 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: |
-        source venv/bin/activate  # Ensure the virtual environment is activated
-        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest  # Push Docker image
+        source venv-env/bin/activate  # Ensure the virtual environment is activated
+        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce:latest  # Push Docker image
 
     - name: Set up K3s cluster
       run: |
@@ -49,14 +49,13 @@ jobs:
         sleep 10
         
         kubectl apply -f k8s/deployment.yaml  # Deploy Kubernetes resources
-        kubectl apply -f k8s/service.yaml
-        
+
     - name: Get service URL
       id: get_url  # Reference this step later
       run: |
         # Get the external IP and NodePort for the service
         NODE_IP=$(hostname -I | awk '{print $1}')
-        NODE_PORT=$(kubectl get svc ecommerce-mock-service -o jsonpath='{.spec.ports[0].nodePort}')
+        NODE_PORT=$(kubectl get svc ecommerce-service -o jsonpath='{.spec.ports[0].nodePort}')
         
         # Form the service URL
         SERVICE_URL="http://$NODE_IP:$NODE_PORT"
