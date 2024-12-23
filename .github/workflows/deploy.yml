@@ -12,17 +12,18 @@ jobs:
     runs-on: self-hosted  # Run the job on an Ubuntu runner
     
     steps:
-    - name: Set up K3s cluster
+    - name: Set up Kubeconfig
       run: |
-        curl -sfL https://get.k3s.io | sh -  # Install K3s
-        # Ensure kubectl symlink does not already exist
-        if [ ! -f /usr/local/bin/kubectl ]; then
-            sudo ln -s /usr/local/bin/k3s /usr/local/bin/kubectl
-        fi
+        # Decode the KUBE_CONFIG secret from base64 and save it to the kubeconfig file
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
+        # Verify that kubeconfig is correctly set up
+        kubectl config view
         
         # Wait for K3s to be ready
         sleep 10
-        
+     
+    - name: Deploy to Kubernetes
+      run: |
         kubectl apply -f k8s/deployment.yaml  # Deploy Kubernetes resources
         kubectl apply -f k8s/service.yaml
 
