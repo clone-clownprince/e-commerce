@@ -1,9 +1,0 @@
-﻿{
-  "agentId": 2,
-  "agentName": "of-crime",
-  "poolId": 1,
-  "poolName": "Default",
-  "serverUrl": "https://pipelinesghubeus10.actions.githubusercontent.com/bqYlKNexPPVMGnavNqyMoePy4IF9jn7sqhcwUfsRrXfrRYbc4t/",
-  "gitHubUrl": "https://github.com/clone-clownprince/e-commerce-mock",
-  "workFolder": "_work"
-}

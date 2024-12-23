@@ -1,0 +1,15 @@
+# Exclude GitHub Actions runner folder
+/actions-runner/
+
+# Exclude Git configuration and local environment files
+.git/
+.gitmodules
+.venv/
+node_modules/
+*.log
+
+# Exclude IDE and OS-specific files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
