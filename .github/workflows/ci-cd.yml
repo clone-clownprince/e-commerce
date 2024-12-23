@@ -56,7 +56,7 @@ jobs:
       run: |
         # Get the external IP and NodePort for the service
         NODE_IP=$(hostname -I | awk '{print $1}')
-        NODE_PORT=$(kubectl get svc ecommerce-service -o jsonpath='{.spec.ports[0].nodePort}')
+        NODE_PORT=$(kubectl get svc ecommerce-mock-service -o jsonpath='{.spec.ports[0].nodePort}')
         
         # Form the service URL
         SERVICE_URL="http://$NODE_IP:$NODE_PORT"
@@ -85,3 +85,4 @@ jobs:
       run: |
         docker system prune -af  # Clean up Docker
         kubectl delete -f k8s/deployment.yaml  # Remove Kubernetes resources after testing
+        kubectl delete -f k8s/service.yaml
