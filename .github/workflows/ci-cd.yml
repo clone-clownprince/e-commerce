@@ -72,6 +72,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Set KUBECONFIG
+        run: |
+          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+          kubectl get nodes
+
+
       # Deploy to a remote server or Kubernetes
       - name: Deploy to Kubernetes Cluster
         run: |
