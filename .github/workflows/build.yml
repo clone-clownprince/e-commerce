@@ -3,48 +3,52 @@ name: Build E-Commerce Application
 on:
   push:
     branches:
-      - main  # Trigger the workflow when code is pushed to the main branch
+      - main
 
 jobs:
   test:
-    runs-on: self-hosted  # Run the job on an Ubuntu runner
+    runs-on: self-hosted
 
     steps:
     - name: Check out code
-      uses: actions/checkout@v3  # Checkout the code from the repository
+      uses: actions/checkout@v3
 
-    - name: Install dependencies
+    - name: Set up Python environment
       run: |
-        python3 -m venv venv-env  # Create the virtual environment in a separate folder
+        DEBUG "Setting up Python virtual environment..."
+        python3 -m venv venv-env  # Create the virtual environment
         source venv-env/bin/activate
-        python3 --version  # Ensure the correct version of Python is used
         pip install --upgrade pip
-        pip install -r requirements.txt  # Install the dependencies
-    
+        pip install --no-deps --upgrade -r requirements.txt
+
     - name: Run tests
       run: |
+        DEBUG "Running tests..."
         source venv-env/bin/activate
-        pytest --maxfail=5 --disable-warnings  # Run pytest with options to limit output in case of failures
+        pytest --maxfail=5 --disable-warnings --verbose
+        DEBUG "Tests completed."
 
   build:
-    runs-on: self-hosted  # Run the job on an Ubuntu runner
-    needs: test  # Ensure the build job only runs after the test job passes
+    runs-on: self-hosted
+    needs: test
 
     steps:
     - name: Check out code
-      uses: actions/checkout@v3  # Checkout the code from the repository
+      uses: actions/checkout@v3  
 
-    - name: Install dependencies
+    - name: Set up Python environment
       run: |
-        python3 -m venv venv-env  # Create the virtual environment in a separate folder
+        DEBUG "Setting up Python virtual environment..."
+        python3 -m venv venv-env  # Create the virtual environment
         source venv-env/bin/activate
-        python3 --version  # Ensure the correct version of Python is used
-        pip install --upgrade pip
-        pip install -r requirements.txt  # Install the dependencies
-    
+        pip install --upgrade pip  # Upgrade pip to the latest version
+        pip install --no-deps --upgrade -r requirements.txt
+
     - name: Build Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest .  # Build Docker image
+        DEBUG "Building Docker image..."
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest .
+        DEBUG "Docker image built."
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -54,4 +58,6 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest  # Push Docker image
+        DEBUG "Pushing Docker image to Docker Hub..."
+        docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-mock:latest
+        DEBUG "Docker image pushed to Docker Hub."

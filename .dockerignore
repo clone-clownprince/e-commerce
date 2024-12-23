@@ -1,12 +1,21 @@
-# Exclude Git configuration and local environment files
-.git/
-.gitmodules
-.venv/
-node_modules/
-*.log
+# Ignore Python bytecode files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
 
-# Exclude IDE and OS-specific files
-.idea/
+# Ignore the virtual environment
+venv/
+
+# Ignore the test cache
+.pytest_cache/
+
+# Ignore Git-related files
+.git/
+
+# Ignore IDE/editor-specific files (if applicable)
 .vscode/
-.DS_Store
-Thumbs.db
+.idea/
+
+# Ignore unnecessary files
+*.md

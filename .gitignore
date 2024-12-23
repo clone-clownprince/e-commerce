@@ -1,12 +1,22 @@
-# Node.js dependencies (if applicable)
-node_modules/
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Python environment (if applicable)
-.venv/
+# Ignore the virtual environment
+venv/
 
-# Log files
+# Ignore the test cache
+.pytest_cache/
+
+# Ignore any IDE/editor-specific files
+.vscode/
+.idea/
+
+# Ignore logs
 *.log
 
-# OS-specific files
-.DS_Store
-Thumbs.db
+# Ignore environment-specific configuration files
+.env
+.env.*
