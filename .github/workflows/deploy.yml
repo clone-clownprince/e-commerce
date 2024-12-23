@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows:
       - Build E-Commerce Application
+    types:
       - completed
 
 jobs:
@@ -13,26 +14,26 @@ jobs:
     steps:
     - name: Set up Kubeconfig
       run: |
-        DEBUG "Setting up Kubeconfig..."
+        echo "[DEBUG] Setting up Kubeconfig..."
         # Decode the KUBE_CONFIG secret from base64 and save it to the kubeconfig file
         echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
         
         # Verify that kubeconfig is correctly set up
         kubectl config view
         
-        DEBUG "Waiting for K3s to be ready..."
+        echo "[DEBUG] Waiting for K3s to be ready..."
         # Wait for K3s to be ready
         sleep 10
      
     - name: Deploy to Kubernetes
       run: |
-        DEBUG "Deploying Kubernetes resources..."
+        echo "[DEBUG] Deploying Kubernetes resources..."
         kubectl apply -f k8s/deployment.yaml
         kubectl apply -f k8s/service.yaml
 
     - name: Get service URL
       run: |
-        DEBUG "Retrieving service URL..."
+        echo "[DEBUG] Retrieving service URL..."
         # Get the external IP and NodePort for the service
         NODE_IP=$(hostname -I | awk '{print $1}')
         NODE_PORT=$(kubectl get svc ecommerce-mock-service -o jsonpath='{.spec.ports[0].nodePort}')
@@ -43,27 +44,27 @@ jobs:
 
     - name: Wait for service availability
       run: |
-        DEBUG "Waiting for service availability..."
+        echo "[DEBUG] Waiting for service availability..."
         # Ensure SERVICE_URL is available
         if [ -z "$SERVICE_URL" ]; then
-          DEBUG "SERVICE_URL not set. Exiting."
+          echo "[DEBUG] SERVICE_URL not set. Exiting."
           exit 1
         fi
         
         # Wait for the service to be available
         until curl --silent --fail $SERVICE_URL; do
-          DEBUG "Waiting for service to be available..."
+          echo "[DEBUG] Waiting for service to be available..."
           sleep 5
         done
 
     - name: Test the application
       run: |
-        DEBUG "Testing app at $SERVICE_URL"
+        echo "[DEBUG] Testing app at $SERVICE_URL"
         curl -v $SERVICE_URL  # Verbose curl to verify the app is working
 
     - name: Clean up Docker and Kubernetes resources
       run: |
-        DEBUG "Cleaning up Docker and Kubernetes resources..."
+        echo "[DEBUG] Cleaning up Docker and Kubernetes resources..."
         docker system prune -af  # Clean up Docker
         kubectl delete -f k8s/deployment.yaml  
         kubectl delete -f k8s/service.yaml
