@@ -1,6 +1,3 @@
-# Exclude GitHub Actions runner folder
-/actions-runner/
-
 # Exclude Git configuration and local environment files
 .git/
 .gitmodules
