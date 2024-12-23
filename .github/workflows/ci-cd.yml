@@ -74,7 +74,7 @@ jobs:
 
       - name: Set KUBECONFIG
         run: |
-          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+          export KUBECONFIG=~/.kube/config 
           sudo kubectl get nodes
 
 
